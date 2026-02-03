@@ -49,10 +49,25 @@ Battery-Inspection-System/
 
 ## 요구사항 / Requirements
 
-- Python 3.8 이상
+- Python 3.11.7 (권장, 라이브러리 호환성 검증됨 / recommended, library compatibility verified)
+  - Python 3.14.x 등 최신 버전은 일부 라이브러리와 호환 문제가 있을 수 있습니다.
 - NVIDIA GPU (CUDA 12.x 권장, CPU 전용 실행 가능)
 - Basler 산업용 카메라 (pypylon 지원)
 - Windows (pypylon, PyQt6 지원 환경)
+
+### 테스트된 환경 / Tested Environment
+
+| 항목 | 버전 |
+|------|------|
+| Python | 3.11.7 |
+| GPU | NVIDIA GeForce RTX 5050 (8GB) |
+| NVIDIA 드라이버 | 591.74 |
+| CUDA (드라이버 지원) | 13.1 |
+| PyTorch (빌드) | 2.11.0+cu128 |
+| TorchVision | 0.25.0+cu128 |
+| OpenCV | 4.12.0 |
+| PyQt6 | 6.10.1 |
+| pypylon | 4.2.0 |
 
 ---
 
