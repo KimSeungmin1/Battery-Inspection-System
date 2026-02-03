@@ -13,9 +13,28 @@ AI-based automated inspection solution for battery exterior quality control.
 
 This project provides a real-time AI inspection solution for battery exterior quality control. It integrates with Basler industrial cameras to capture images and performs defect detection through a hybrid approach combining MobileNetV3-based classification and OpenCV-based image processing.
 
+---
+
+## 미리보기 / Preview
+
 ### 실행 화면 / Inspection App Screenshot
 
 <img width="1280" height="720" alt="Battery Inspection App 실행 화면" src="https://github.com/user-attachments/assets/f50f1a82-ef3c-4233-bd87-d6f517ebe461" />
+
+### 학습 결과 / Training Results
+
+Epoch별 Validation Accuracy:
+
+| Epoch | Validation Accuracy |
+|-------|---------------------|
+| 5     | 85.22%              |
+| 10    | 89.14%              |
+| 15    | 88.50%              |
+| 20    | 94.28%              |
+| 25    | 95.78%              |
+| 30    | **95.93%**          |
+
+<img width="882" height="400" alt="Validation Accuracy by Epoch" src="https://github.com/user-attachments/assets/b4611aa9-90e1-43a9-8bd8-4db941396042" />
 
 ---
 
@@ -170,21 +189,6 @@ This project uses the **Battery Defect Image Data** from [AI-Hub](https://www.ai
 - **데이터셋**: [배터리 불량 이미지 데이터](https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&dataSetSn=71687)
 - **제공기관**: 과학기술정보통신부 · NIA 한국지능정보사회진흥원
 - **구축규모**: 배터리 외관(RGB) 이미지 22만 장 이상, 결함 및 종류 라벨링
-
-### 학습 결과 / Training Results
-
-Epoch별 Validation Accuracy (모델 학습 로그 기준):
-
-| Epoch | Validation Accuracy |
-|-------|---------------------|
-| 5     | 85.22%              |
-| 10    | 89.14%              |
-| 15    | 88.50%              |
-| 20    | 94.28%              |
-| 25    | 95.78%              |
-| 30    | **95.93%**          |
-
-<img width="600" alt="Validation Accuracy by Epoch" src="assets/validation_accuracy_by_epoch.png" />
 
 ---
 
