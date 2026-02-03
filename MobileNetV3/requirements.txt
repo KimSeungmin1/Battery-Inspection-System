@@ -1,0 +1,72 @@
+# ============================================
+# AI Inspection System - 필수 라이브러리
+# AI Inspection System - Required Libraries
+# ============================================
+# 설치 방법 / Installation: pip install -r requirements.txt
+# ============================================
+
+# ============================================
+# Inspection App 라이브러리 / Inspection App Libraries
+# ============================================
+# PyQt6: 메인 GUI 프레임워크 / Main GUI framework
+# pyqtgraph: 실시간 그래프 표시 (배터리 신뢰도 등) / Real-time graphs
+PyQt6>=6.7.0
+pyqtgraph>=0.13.3
+
+# ============================================
+# 이미지 처리 및 컴퓨터 비전 / Image Processing & Computer Vision
+# ============================================
+# opencv-python: 이미지 처리, 엣지 검출, 배터리 영역 추출
+# opencv-python: Image processing, edge detection, ROI extraction
+opencv-python>=4.10.0
+numpy>=1.26.0  # 수치 연산 / Numerical operations
+Pillow>=10.4.0  # 이미지 로드/저장 / Image load/save
+
+# ============================================
+# 카메라 연결 / Camera (Basler)
+# ============================================
+# pypylon: Basler 산업용 카메라 SDK Python 바인딩
+# pypylon: Basler industrial camera SDK Python bindings
+pypylon>=2.3.0
+
+# ============================================
+# 딥러닝 / Deep Learning (PyTorch)
+# ============================================
+# 기본: CUDA 12.8 (RTX 5050 등 최신 GPU 지원)
+# Default: CUDA 12.8 (for latest GPUs like RTX 5050)
+# CPU만 사용 시: 아래 --extra-index-url 주석 처리 후 torch>=2.5.0, torchvision>=0.20.0 사용
+# CPU only: Comment out --extra-index-url and use torch>=2.5.0, torchvision>=0.20.0
+
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch>=2.5.0
+torchvision>=0.20.0
+
+# 다른 CUDA 버전 사용 시 (위 torch/torchvision 주석 후 아래 중 하나 선택):
+# For other CUDA versions (comment above, choose one):
+# CUDA 11.8: --extra-index-url https://download.pytorch.org/whl/cu118
+# CUDA 12.1: --extra-index-url https://download.pytorch.org/whl/cu121
+# CUDA 12.4: --extra-index-url https://download.pytorch.org/whl/cu124
+
+# ============================================
+# 데이터 처리 / Data Processing
+# ============================================
+pandas>=2.2.0  # 데이터프레임 처리 / DataFrame operations
+pyarrow>=17.0.0  # Parquet 파일 지원 (이상 점수 저장 등) / Parquet file support
+
+# ============================================
+# 설정 파일 관리 / Configuration
+# ============================================
+PyYAML>=6.0.1  # config.yaml 파싱 / YAML config parsing
+python-dotenv>=1.0.1  # .env 환경변수 로드 / Load .env variables
+
+# ============================================
+# 유틸리티 / Utilities
+# ============================================
+tqdm>=4.66.0  # 진행 표시줄 / Progress bar
+
+# ============================================
+# EXE 빌드 (선택) / EXE Build (Optional)
+# ============================================
+# PyInstaller로 단일 실행 파일 패키징 시 필요
+# Required for packaging to single executable via PyInstaller
+pyinstaller>=6.10.0

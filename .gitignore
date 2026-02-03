@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Environment variables (secrets)
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Model checkpoints & training outputs
+MobileNetV3/runs/
+*.pth
+*.pt
+
+# Deprecated / obsolete (폴더명 변경으로 사용 안 함)
+UI/
+
+# Personal notes / documentation
+main_final_정리.txt
+main_정리.txt
+train_autoencoder_mixed_문서화.txt
+
+# OS
+.DS_Store
+Thumbs.db

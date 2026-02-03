@@ -1,0 +1,211 @@
+# ============================================
+# AutoEncoder 학습 및 추론 설정 파일
+# Configuration file for AutoEncoder training and inference
+# ============================================
+# 이 파일을 수정하여 설정을 변경할 수 있습니다. 수정 후 저장하면 다음 실행 시 자동 적용됩니다.
+# Edit this file to change settings. Changes apply on the next run.
+# ============================================
+
+# 공통 설정 (모든 스크립트에서 사용)
+# Common settings (used by all scripts)
+common:
+  # base_dir: 경로 기준점. "." = MobileNetV3 폴더, 또는 절대경로 지정
+  # base_dir: Path base. "." = MobileNetV3 folder, or specify absolute path
+  # .env의 DATA_BASE_DIR로 오버라이드 가능 (환경별 경로 설정 시 유용)
+  # Can be overridden by DATA_BASE_DIR in .env (useful for per-environment paths)
+  base_dir: "."  # 프로젝트 루트 경로 ("." = 현재 파일 위치 기준) / Path base ("." = current file location)
+  raw_data_dir: "raw_data"  # 원본 데이터 폴더명 / Raw data folder name
+  runs_dir: "runs"  # 결과 저장 폴더명 / Output folder name (checkpoints, logs)
+  image_folder: "TS_Exterior_Img_Datasets_images_4"  # 이미지 폴더명 / Default image folder name
+  
+  # 이미지 전처리 / Image preprocessing
+  image_size: 320  # 입력 이미지 크기 (학습/추론 동일해야 함, MobileNetV3 권장: 320)
+                   # Input image size (must match for train/inference, MobileNetV3 recommended: 320)
+  use_bilateral: false  # Bilateral Filter 사용 여부 (false: 이미 적용된 이미지 사용, true: 학습 시 다시 적용)
+                        # Use Bilateral Filter (false: use pre-filtered images, true: apply during training)
+  bilateral:
+    d: 9  # 필터 커널 크기 (홀수, 권장: 9) / Filter kernel size (odd number, recommended: 9)
+    sigma_color: 75  # 색상 필터 강도 (권장: 75) / Color filter strength
+    sigma_space: 75  # 거리 필터 강도 (권장: 75) / Spatial filter strength
+  # 외장하드 최적화: 큰 이미지를 순차적으로 줄이기 위한 중간 사이즈
+  # Optimization for external drives: intermediate size to progressively resize large images
+  intermediate_size: 640  # 중간 리사이즈 사이즈 (큰 이미지를 먼저 이 사이즈로 줄임)
+                          # Intermediate resize size (resize large images to this first)
+  
+  device: "cuda"  # 디바이스 ("auto"=자동, "cuda"=GPU, "cpu"=CPU)
+                  # Device ("auto"=auto, "cuda"=GPU, "cpu"=CPU)
+                  # GPU 없으면 오류 발생 / Error if GPU not available when "cuda"
+
+# 학습 설정 (train_autoencoder.py)
+# Training settings (train_autoencoder.py)
+training:
+  batch_size: 32  # 배치 크기 (안정적인 학습을 위한 권장값)
+                  # Batch size (recommended for stable training)
+  epochs: 30  # 에폭 수 (Early Stopping으로 자동 중단 가능)
+              # Number of epochs (can stop early via Early Stopping)
+  learning_rate: 0.00015  # 학습률 / Learning rate
+  learning_rate_schedule: true  # 학습률 스케줄러 사용 (epoch마다 학습률 조절)
+                                # Use learning rate scheduler
+  lr_scheduler_type: "cosine"  # 스케줄러 타입: "step" (StepLR) 또는 "cosine" (CosineAnnealingLR)
+                               # Scheduler type: "step" or "cosine"
+  lr_decay_factor: 0.7  # 학습률 감소 비율 (StepLR 사용 시) / LR decay factor (when using StepLR)
+  lr_step_size: 10  # 학습률 감소 주기 / LR decay step size
+  min_lr: 0.000001  # 최소 학습률 / Minimum learning rate
+  weight_decay: 0.0001  # Weight Decay (L2 정규화, 과적합 방지) / L2 regularization
+  model_name: "autoencoder_bilateral.pth"  # 저장될 모델 파일명 / Output model filename
+  resume: false  # 학습 재개 (true: 체크포인트에서 이어서, false: 처음부터)
+                 # Resume training (true: from checkpoint, false: from scratch)
+  checkpoint_name: "checkpoint.pth"  # 체크포인트 파일명 (모델+optimizer+에폭 포함)
+                                     # Checkpoint filename (model, optimizer, epoch)
+  save_epoch_models: true  # 각 epoch마다 모델 저장 여부 / Save model each epoch
+  
+  # 라벨된 데이터셋 학습 설정 / Labeled dataset training
+  training_mode: "classifier"  # "normal_only" (정상만), "contrastive" (정상+불량), "classifier" (라벨 분류)
+                               # "normal_only", "contrastive", or "classifier"
+  contrastive_weight: 0.1  # Contrastive Learning 불량 데이터 가중치
+                           # Contrastive weight for defect data
+  
+  # 성능 최적화 (GPU 메모리 및 학습 속도)
+  # Performance optimization (GPU memory and training speed)
+  optimization:
+    num_workers: 6  # 데이터 로딩 워커 수 / DataLoader workers
+    pin_memory: true  # GPU 사용 시 권장 (CPU-GPU 전송 속도 향상) / Recommended for GPU
+    prefetch_factor: 2  # 데이터 프리페칭 배치 수 / Prefetch batches
+    use_mixed_precision: true  # FP16 사용 (속도 향상, 메모리 절약) / Mixed precision training
+    gradient_accumulation_steps: 2  # 그래디언트 누적 (효과적 배치 크기 증가) / Gradient accumulation
+  
+  # 데이터 증강 / Data augmentation
+  augmentation:
+    use_augmentation: true  # 데이터 증강 사용 여부 / Enable augmentation
+    horizontal_flip: 0.5  # 수평 뒤집기 확률 (0.5 = 50%) / Horizontal flip probability
+    rotation: 20  # 회전 각도 (도) / Rotation angle (degrees)
+    color_jitter: 0.4  # 색상 변화 강도 / Color jitter strength
+    brightness: 0.2  # 밝기 변화 / Brightness variation
+    contrast: 0.2  # 대비 변화 / Contrast variation
+    random_erasing: 0.15  # Random Erasing 확률 (과적합 방지) / Random erasing probability
+  
+  # 모델 정규화 (과적합 방지) / Model regularization
+  regularization:
+    dropout: 0.3  # Dropout 비율 / Dropout rate
+    label_smoothing: 0.15  # Label Smoothing / Label smoothing
+    
+    # Focal Loss (불균형 데이터에 효과적) / Focal Loss (effective for imbalanced data)
+    use_focal_loss: true  # Focal Loss 사용 여부 / Use Focal Loss
+    focal_loss_gamma: 2.0  # Focal Loss gamma / Focal Loss gamma
+    
+    # 클래스 불균형 보정 가중치 / Class imbalance weights
+    # 순서: [normal, Damaged, Pollution] / Order: [normal, Damaged, Pollution]
+    class_weight_override: [1.0, 30.0, 3.0]
+  
+  # 데이터 샘플링 / Data sampling
+  use_weighted_sampler: true  # WeightedRandomSampler 사용 (클래스 비율 균형)
+                              # Use WeightedRandomSampler for class balance
+  
+  # Early Stopping (과적합 방지 및 효율성) / Early Stopping
+  early_stopping:
+    enabled: true  # Early Stopping 사용 여부 / Enable Early Stopping
+    patience: 8  # 개선 없이 기다릴 epoch 수 / Patience (epochs without improvement)
+    min_delta: 0.001  # 개선으로 간주할 최소 변화량 (0.1%) / Min delta for improvement
+  
+  # 혼합 폴더 학습 (train_autoencoder_mixed.py) - 정상/불량이 같은 폴더에 섞여있을 때
+  # Mixed folder training - when normal and defect images are in the same folder
+  mixed_dataset:
+    # 이미지 폴더 경로 (Training과 Validation 모두 포함)
+    # Image folder path (includes both Training and Validation)
+    # 상대경로: MobileNetV3 폴더 기준 (base_dir: ".") / Relative to MobileNetV3 (base_dir: ".")
+    image_dir: "data/data_resized"  # 학습 데이터 경로 / Training data path
+    # Training/Validation 폴더 패턴 (와일드카드 지원)
+    # Folder patterns for Training/Validation (supports wildcards)
+    folder_pattern:
+      - "Training/Sources/TS_Exterior_Img_Datasets_images_*"
+      - "Validation/Sources/VS_Exterior_Img_Datasets_images"
+    
+    # 라벨 파일/폴더 경로 / Label file/folder paths
+    label_file:
+      - "data/data_resized/Training/label/TL_Exterior_Img_Datasets_label"
+      - "data/data_resized/Validation/label/VL_Exterior_Img_Datasets_label"
+    filename_pattern_mode: "auto"  # "auto", "normal_keywords", "defect_keywords", "custom"
+    normal_keywords: ["normal", "ok", "good", "pass", "정상", "양품"]  # 정상 이미지 키워드
+    defect_keywords: ["defect", "ng", "bad", "fail", "불량", "불량품"]  # 불량 이미지 키워드
+    custom_pattern: null  # 커스텀 정규식 (예: ".*_(ok|ng)_.*") / Custom regex pattern
+    
+    # 다중 클래스 모드 / Multi-class mode
+    multi_class: true  # true: 3클래스(normal, Damaged, Pollution), false: 2클래스(normal, defect)
+
+# 추론 설정 (infer_autoencoder.py)
+# Inference settings (infer_autoencoder.py)
+inference:
+  batch_size: 64  # 추론 배치 크기 (학습보다 크게 설정 가능) / Inference batch size
+  model_name: "autoencoder_bilateral.pth"  # 로드할 모델 파일명 / Model file to load
+  output_file: "anomaly_scores.parquet"  # 이상 점수 저장 파일 (Parquet 형식) / Output file (Parquet)
+  
+  optimization:
+    num_workers: 8  # 병렬 데이터 로딩 워커 수 / DataLoader workers
+    pin_memory: true
+    prefetch_factor: 4
+
+# 판정 설정 (make_defect_prediction.py)
+# Prediction settings (make_defect_prediction.py)
+prediction:
+  input_file: "anomaly_scores.parquet"  # 입력 Parquet 파일 / Input Parquet file
+  top_ratio: 0.05  # 불량 판정 비율 (상위 5%를 불량으로, 권장: 0.03~0.10)
+                   # Defect ratio (top 5% as defect, recommended: 0.03~0.10)
+  target_accuracy: 0.90  # 목표 정확도 (90%) / Target accuracy
+
+# Inspection App 설정 (inspection_app/main.py)
+# Inspection App settings (inspection_app/main.py)
+ui:
+  emit_interval_ms: 30  # UI 신호 emit 최소 간격 (밀리초, 약 33fps) / UI update interval (ms)
+  
+  inference:
+    fixed_epoch: null  # null=자동 선택, 숫자=해당 epoch 고정 / null=auto, number=fixed epoch
+  
+  # 하자 탐지 파라미터 / Defect detection parameters
+  detection:
+    defect_area_min: 250  # 최소 하자 영역 크기 (픽셀) / Min defect area (pixels)
+    canny_low_threshold: 50  # Canny 엣지 검출 낮은 임계값 / Canny low threshold
+    canny_high_threshold: 150  # Canny 엣지 검출 높은 임계값 / Canny high threshold
+    color_std_h_threshold: 60  # 색상(H) 채널 분산 임계값 / H channel std threshold
+    color_std_s_threshold: 50  # 채도(S) 채널 분산 임계값 / S channel std threshold
+    
+    # 크랙 탐지 / Crack detection
+    crack:
+      min_length: 50  # 최소 크랙 길이 (픽셀) / Min crack length
+      max_width: 10  # 최대 크랙 너비 / Max crack width
+      max_area: 300  # 최대 크랙 면적 / Max crack area
+      min_aspect_ratio: 5.0  # 최소 종횡비 (길고 좁은 형태) / Min aspect ratio
+      max_aspect_ratio: 0.2  # 최대 종횡비 / Max aspect ratio
+    
+    # 스크래치 탐지 / Scratch detection
+    scratch:
+      min_area: 400  # 최소 스크래치 면적 / Min scratch area
+      aspect_ratio_min: 0.4
+      aspect_ratio_max: 2.5
+      large_area: 500  # 큰 스크래치 임계값 / Large scratch threshold
+    
+    # 이물질 탐지 / Foreign object detection
+    foreign_object:
+      min_area: 20  # 최소 이물질 면적 / Min foreign object area
+      max_area: 1000  # 최대 이물질 면적 / Max foreign object area
+      aspect_ratio_min: 0.2
+      aspect_ratio_max: 5.0
+    
+    # 텍스트 필터링 (텍스트 오인식 방지) / Text filter (avoid text false positives)
+    text_filter:
+      area_threshold: 250
+      small_area: 300
+      large_area: 400
+  
+  # 객체 추적 파라미터 / Object tracking parameters
+  tracking:
+    defect_tracking_max_age: 30  # 일반 하자 최대 유지 프레임 수 / Max age for defect track
+    defect_tracking_confirmed_max_age: 1000  # 확정된 하자 최대 유지 프레임 / Max age for confirmed defect
+    defect_tracking_min_confidence: 25  # 하자 확정 최소 confidence / Min confidence for defect
+    defect_position_alpha: 0.0  # 하자 위치 스무딩 (0.0=고정) / Position smoothing
+    
+    battery:
+      min_confidence: 3  # 배터리 확정 최소 confidence / Min battery confidence
+      position_alpha: 0.05  # 배터리 위치 스무딩 / Battery position smoothing
+      not_detected_max: 90  # 배터리 미감지 최대 프레임 / Max undetected frames
+      not_detected_max_confirmed: 150  # 확정된 배터리 미감지 최대 프레임 / Max for confirmed battery
+      iou_threshold: 0.5  # IoU 기반 배터리 추적 임계값 (0.0~1.0) / IoU threshold for tracking
