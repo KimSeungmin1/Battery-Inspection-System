@@ -116,7 +116,6 @@ python inspection_app/main.py
 
 # 앱 실행 이미지
 <img width="1908" height="1044" alt="image" src="https://github.com/user-attachments/assets/f50f1a82-ef3c-4233-bd87-d6f517ebe461" />
-
 ```
 
 또는
