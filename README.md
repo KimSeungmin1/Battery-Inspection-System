@@ -145,10 +145,6 @@ python inspection_app/main.py
 cd inspection_app
 python main.py
 ```
-### 실행 이미지 (Inspection App image)
-
-<img width="1908" height="1044" alt="image" src="https://github.com/user-attachments/assets/f50f1a82-ef3c-4233-bd87-d6f517ebe461" />
-
 ```bash
 # 프로젝트 루트에서
 python inspection_app/main.py
