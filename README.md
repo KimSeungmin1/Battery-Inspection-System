@@ -19,7 +19,7 @@ This project provides a real-time AI inspection solution for battery exterior qu
 
 ### 실행 화면 / Inspection App Screenshot
 
-<img width="1280" height="720" alt="Battery Inspection App 실행 화면" src="https://github.com/user-attachments/assets/f50f1a82-ef3c-4233-bd87-d6f517ebe461" />
+<img width="800" alt="Battery Inspection App 실행 화면" src="https://github.com/user-attachments/assets/f50f1a82-ef3c-4233-bd87-d6f517ebe461" />
 
 ### 학습 결과 / Training Results
 
@@ -34,7 +34,7 @@ Epoch별 Validation Accuracy:
 | 25    | 95.78%              |
 | 30    | **95.93%**          |
 
-<img width="882" height="400" alt="Validation Accuracy by Epoch" src="https://github.com/user-attachments/assets/b4611aa9-90e1-43a9-8bd8-4db941396042" />
+<img width="800" alt="Validation Accuracy by Epoch" src="https://github.com/user-attachments/assets/b4611aa9-90e1-43a9-8bd8-4db941396042" />
 
 ---
 
