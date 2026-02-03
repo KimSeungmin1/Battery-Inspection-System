@@ -84,7 +84,7 @@ Battery-Inspection-System/
 | 항목 | 버전 |
 |------|------|
 | Python | 3.11.7 |
-| GPU | NVIDIA GeForce RTX 5050 (8GB) |
+| GPU | NVIDIA GeForce RTX 5050 Laptop (8GB) |
 | NVIDIA 드라이버 | 591.74 |
 | CUDA (드라이버 지원) | 13.1 |
 | PyTorch (빌드) | 2.11.0+cu128 |
