@@ -1,5 +1,7 @@
 # Battery Inspection System
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 AI 기반 배터리 외관 검사 시스템입니다.  
 AI-based automated inspection solution for battery exterior quality control.
 
@@ -38,6 +40,7 @@ Battery-Inspection-System/
 │   ├── eval_classifier_accuracy.py  # 정확도 평가
 │   └── requirements.txt
 ├── .env.example             # 환경변수 설정 예시
+├── LICENSE                  # MIT License
 ├── requirements.txt         # 프로젝트 의존성 (pip freeze)
 └── README.md
 ```
@@ -157,7 +160,13 @@ data_resized/
 
 ## 라이선스 / License
 
-본 프로젝트의 라이선스는 별도로 명시되지 않았습니다. 사용 전 문의를 권장합니다.
+본 프로젝트는 [MIT License](LICENSE) 하에 배포됩니다.  
+This project is distributed under the [MIT License](LICENSE).
+
+저작권 (c) 2026 KimSeungmin1  
+Copyright (c) 2026 KimSeungmin1
+
+자세한 내용은 [LICENSE](LICENSE) 파일을 참조하시기 바랍니다.
 
 ---
 
